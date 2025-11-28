@@ -1,8 +1,23 @@
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { useState } from "react";
 
-export default function AddTask() {
+export default function TodoTaskAdding({setTasks, tasks}) {
+  const [task, setTask] = useState('')
+
+  const handleInputChange = (event) => {
+    setTask(event.target.value)
+  }
+
+  const addingTask = () => {
+    const newTask = {
+      title: task,
+      isDone: false
+    }
+    setTasks([...tasks, newTask])
+    setTask('')
+  }
   return (
     <Box
       component="form"
@@ -14,6 +29,7 @@ export default function AddTask() {
         variant="contained"
         size="large"
         sx={{ height: "55px", width: "20%" }}
+        onClick={addingTask}
       >
         Add
       </Button>
@@ -21,6 +37,8 @@ export default function AddTask() {
         id="outlined-basic"
         label="Task title"
         variant="outlined"
+        onChange={handleInputChange}
+        value={task}
         sx={{ width: "78%" }}
       />
     </Box>

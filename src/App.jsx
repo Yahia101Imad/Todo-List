@@ -1,4 +1,4 @@
-import Todo from "./components/Todo";
+import TodoCard from "./components/TodoCard";
 import "./style.css";
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
         height: "100vh",
       }}
     >
-      <Todo />
+      <TodoCard />
     </div>
   );
 }
