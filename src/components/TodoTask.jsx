@@ -8,6 +8,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import DoneIcon from "@mui/icons-material/Done";
 import Typography from "@mui/material/Typography";
+import { useContext } from "react";
+import {TodoContext} from '../Contexts/TodoContext'
 
 const Item = styled(Paper)(({isDone}) => ({
   backgroundColor: isDone ? "#e7fde4ff" : "#FFFFFF",
@@ -17,8 +19,8 @@ const Item = styled(Paper)(({isDone}) => ({
   alignItems: "center",
 }));
 
-export default function TodoTask({ title, setTasks, tasks, index }) {
-  
+export default function TodoTask({ task, index }) {
+  const {setTasks, tasks} = useContext(TodoContext)
   const todoTaskIsDone = () => {
     const updatedTasks = tasks.map((task, i) => {
     if (i === index) {
@@ -33,7 +35,7 @@ export default function TodoTask({ title, setTasks, tasks, index }) {
     <Box sx={{ width: "100%", marginTop: "10px" }}>
       <Stack spacing={2}>
         <Item isDone={tasks[index].isDone}>
-          <Typography variant="h5">{title}</Typography>
+          <Typography variant="h5">{task.title}</Typography>
           <div>
             <Button variant="outlined" color="success" onClick={todoTaskIsDone}>
               {<DoneIcon />}

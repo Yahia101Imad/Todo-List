@@ -6,17 +6,18 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+
 import { useState } from "react";
+import { TodoContext } from "../Contexts/TodoContext";
 
 export default function TodoCard() {
-  const [tasks, setTasks] = useState([])
-
+  const [tasks, setTasks] = useState([]);
 
   return (
     <Container maxWidth="sm">
       <Card>
         {/* header of the todo card */}
-        <div style={{ textAlign: "center"}}>
+        <div style={{ textAlign: "center" }}>
           <CardContent>
             <Typography variant="h2">Todo</Typography>
           </CardContent>
@@ -27,16 +28,26 @@ export default function TodoCard() {
             <ToggleButton value="current">Current</ToggleButton>
           </ToggleButtonGroup>
         </div>
-        {/* task list */}
-        <div style={{ padding: "10px" }}>
-          {tasks.map((task, index) => {
-            return <TodoTask key={index} index={index} title={task.title} setTasks={setTasks} tasks={tasks} isDone={tasks[index].isDone} />
-          })}
-        </div>
-        {/* task add */}
-        <div style={{ padding: "10px" }}>
-          <TodoTaskAdding setTasks={setTasks} tasks={tasks}/>
-        </div>
+        <TodoContext.Provider value={{setTasks, tasks}}>
+          {/* task list */}
+          <div style={{ padding: "10px" }}>
+            {tasks.map((task, index) => {
+              return (
+                <TodoTask
+                  key={index}
+                  index={index}
+                  task={task}
+                  isDone={tasks[index].isDone}
+                />
+              );
+            })}
+          </div>
+          
+          {/* task add */}
+          <div style={{ padding: "10px" }}>
+            <TodoTaskAdding />
+          </div>
+        </TodoContext.Provider>
       </Card>
     </Container>
   );

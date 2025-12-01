@@ -1,10 +1,12 @@
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { TodoContext } from "../Contexts/TodoContext";
 
-export default function TodoTaskAdding({setTasks, tasks}) {
+export default function TodoTaskAdding() {
   const [task, setTask] = useState('')
+  const {setTasks, tasks} = useContext(TodoContext)
 
   const handleInputChange = (event) => {
     setTask(event.target.value)
