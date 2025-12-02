@@ -5,7 +5,7 @@ import { useState, useContext } from "react";
 import { TodoContext } from "../Contexts/TodoContext";
 
 export default function TodoTaskAdding() {
-  const [task, setTask] = useState('')
+  const [task, setTask] = useState([])
   const {setTasks, tasks} = useContext(TodoContext)
 
   const handleInputChange = (event) => {
@@ -14,12 +14,16 @@ export default function TodoTaskAdding() {
 
   const addingTask = () => {
     const newTask = {
+      id: Date.now(),
       title: task,
       isDone: false
     }
-    setTasks([...tasks, newTask])
     setTask('')
+    const updatedTasks = [...tasks, newTask]
+    setTasks(updatedTasks)
+    localStorage.setItem('todos', JSON.stringify(updatedTasks))
   }
+
   return (
     <Box
       component="form"
