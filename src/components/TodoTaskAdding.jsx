@@ -1,27 +1,25 @@
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useState, useContext } from "react";
-import { TodoContext } from "../Contexts/TodoContext";
+import { useState, useReducer } from "react";
+import tasksReducer from '../Reducers/TasksReducer'
+// import { TodoContext } from "../Contexts/TodoContext";
+
+
 
 export default function TodoTaskAdding() {
-  const [task, setTask] = useState([])
-  const {setTasks, tasks} = useContext(TodoContext)
+  const [taskInput, setTaskInput] = useState('')
+  // const {setTasks, tasks} = useContext(TodoContext)
+
+  const [tasks, dispatch] = useReducer(tasksReducer, [])
 
   const handleInputChange = (event) => {
-    setTask(event.target.value)
+    setTaskInput(event.target.value)
   }
 
   const addingTask = () => {
-    const newTask = {
-      id: Date.now(),
-      title: task,
-      isDone: false
-    }
-    setTask('')
-    const updatedTasks = [...tasks, newTask]
-    setTasks(updatedTasks)
-    localStorage.setItem('todos', JSON.stringify(updatedTasks))
+    dispatch({type: 'add', payload: {title: taskInput}})
+    setTaskInput('')
   }
 
   return (
@@ -44,7 +42,7 @@ export default function TodoTaskAdding() {
         label="Task title"
         variant="outlined"
         onChange={handleInputChange}
-        value={task}
+        value={taskInput}
         sx={{ width: "78%" }}
       />
     </Box>

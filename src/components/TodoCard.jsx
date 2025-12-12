@@ -8,8 +8,8 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import * as React from "react";
 
-import { useState, useEffect } from "react";
-import { TodoContext } from "../Contexts/TodoContext";
+import { useState } from "react";
+import tasksProvider from '../Contexts/TodoContext'
 
 export default function TodoCard() {
   const [tasks, setTasks] = useState([]);
@@ -57,7 +57,7 @@ export default function TodoCard() {
             <ToggleButton value="not-done">not done</ToggleButton>
           </ToggleButtonGroup>
         </div>
-        <TodoContext.Provider value={{ setTasks, tasks }}>
+        <tasksProvider>
           {/* task list */}
           <div style={{ padding: "10px" }}>
             {tasksToBeRender.map((task, index) => {
@@ -76,7 +76,7 @@ export default function TodoCard() {
           <div style={{ padding: "10px" }}>
             <TodoTaskAdding />
           </div>
-        </TodoContext.Provider>
+        </tasksProvider>
       </Card>
     </Container>
   );

@@ -31,7 +31,6 @@ export default function TodoTask({ title, index }) {
       return task;
     });
     setTasks(updatedTasks);
-    localStorage.setItem('todos', JSON.stringify(updatedTasks))
   };
 
   const todoTaskDelete = () => {
@@ -39,7 +38,6 @@ export default function TodoTask({ title, index }) {
       return tasks[index].id !== task.id;
     });
     setTasks(updatedTasks);
-    localStorage.setItem('todos', JSON.stringify(updatedTasks))
   };
 
   const [open, setOpen] = React.useState(false);

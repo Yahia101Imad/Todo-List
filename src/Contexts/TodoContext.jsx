@@ -1,3 +1,11 @@
-import {createContext} from 'react'
+import { useReducer} from 'react'
+import tasksReducer from '../Reducers/TasksReducer'
 
-export const TodoContext = createContext()
+export default function TasksProvider({children}) {
+    const [tasks, dispatch] = useReducer(tasksReducer, [])
+    return (
+        <TodoContext.Provider value={{tasks, dispatch}}>
+            {children}
+        </TodoContext.Provider>
+    )
+}
