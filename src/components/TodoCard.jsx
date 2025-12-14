@@ -6,35 +6,32 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import * as React from "react";
-
+import { useEffect, useReducer } from "react";
 import { useState } from "react";
-import tasksProvider from '../Contexts/TodoContext'
+import TasksProvider from "../Contexts/TodoContext";
+import tasksReducer from "../Reducers/TasksReducer";
 
 export default function TodoCard() {
-  const [tasks, setTasks] = useState([]);
-  const [alignment, setAlignment] = React.useState("all");
+  const [alignment, setAlignment] = useState("all");
+  const [tasks, dispatch] = useReducer(tasksReducer, [], () => {
+    return JSON.parse(localStorage.getItem('tasks')) || [];
+  });
 
-  const handleChange = (event) => {
-    setAlignment(event.target.value);
-  };
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks])
 
   const doneTasks = tasks.filter((task) => task.isDone);
   const notDoneTasks = tasks.filter((task) => !task.isDone);
   let tasksToBeRender = tasks;
 
-  if (alignment == "done") {
+  if (alignment === "done") {
     tasksToBeRender = doneTasks;
-  } else if (alignment == "not-done") {
+  } else if (alignment === "not-done") {
     tasksToBeRender = notDoneTasks;
   } else {
     tasksToBeRender = tasks;
   }
-
-  // useEffect(() => {
-  //   const storageTasks = JSON.parse(localStorage.getItem("tasks") || []);
-  //   setTasks(storageTasks);
-  // }, []);
 
   return (
     <Container maxWidth="sm">
@@ -49,7 +46,9 @@ export default function TodoCard() {
             color="primary"
             value={alignment}
             exclusive
-            onChange={handleChange}
+            onChange={(e) => {
+              setAlignment(e.target.value);
+            }}
             aria-label="Platform"
           >
             <ToggleButton value="all">All</ToggleButton>
@@ -57,7 +56,7 @@ export default function TodoCard() {
             <ToggleButton value="not-done">not done</ToggleButton>
           </ToggleButtonGroup>
         </div>
-        <tasksProvider>
+        <TasksProvider value={{ tasks, dispatch }}>
           {/* task list */}
           <div style={{ padding: "10px" }}>
             {tasksToBeRender.map((task, index) => {
@@ -76,7 +75,7 @@ export default function TodoCard() {
           <div style={{ padding: "10px" }}>
             <TodoTaskAdding />
           </div>
-        </tasksProvider>
+        </TasksProvider>
       </Card>
     </Container>
   );

@@ -10,10 +10,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import DoneIcon from "@mui/icons-material/Done";
 import Typography from "@mui/material/Typography";
 import { useContext } from "react";
-import { TodoContext } from "../Contexts/TodoContext";
+import TasksProvider from "../Contexts/TodoContext";
 
-const Item = styled(Paper)(({ isDone }) => ({
-  backgroundColor: isDone ? "#e7fde4ff" : "#FFFFFF",
+const Item = styled(Paper)(() => ({
+  backgroundColor: "#FFFFFF",
   padding: "0px 30px",
   display: "flex",
   justifyContent: "space-between",
@@ -21,23 +21,24 @@ const Item = styled(Paper)(({ isDone }) => ({
 }));
 
 export default function TodoTask({ title, index }) {
-  const { setTasks, tasks } = useContext(TodoContext);
+  const { tasks, dispatch } = useContext(TasksProvider);
 
   const todoTaskIsDone = () => {
-    const updatedTasks = tasks.map((task, i) => {
-      if (i === index) {
-        return { ...task, isDone: !task.isDone };
+    dispatch({
+      type: "todoTaskIsDone",
+      payload: {
+        index: index
       }
-      return task;
-    });
-    setTasks(updatedTasks);
+    })
   };
 
   const todoTaskDelete = () => {
-    const updatedTasks = tasks.filter((task) => {
-      return tasks[index].id !== task.id;
-    });
-    setTasks(updatedTasks);
+    dispatch({
+      type: "todoTaskDelete",
+      payload: {
+        index: index
+      }
+    })
   };
 
   const [open, setOpen] = React.useState(false);

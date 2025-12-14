@@ -3,8 +3,8 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { TodoContext } from "../Contexts/TodoContext";
 import { useContext, useState } from "react";
+import TasksProvider from "../Contexts/TodoContext";
 
 const style = {
   position: "absolute",
@@ -19,20 +19,19 @@ const style = {
 };
 
 export default function ModalEdit({ open, handleClose, index }) {
-  const { setTasks, tasks } = useContext(TodoContext);
+  const { tasks, dispatch } = useContext(TasksProvider);
   const [editedTitle, setEditedTitle] = useState(tasks[index].title);
 
-  const handleEditChange = (e) => {
-    setEditedTitle(e.target.value)
-  }
-
   const submitTaskEdit = () => {
-    const updatedTasks = tasks.map((task, i) => 
-      i === index ? { ...task, title: editedTitle } : task
-    );
-    setTasks(updatedTasks);
+    dispatch({
+      type: "submitTaskEdit",
+      payload: {
+        index: index,
+        editedTitle: editedTitle,
+      },
+    });
     handleClose();
-  }
+  };
 
   return (
     <div>
@@ -47,16 +46,25 @@ export default function ModalEdit({ open, handleClose, index }) {
             id="modal-modal-title"
             variant="h6"
             component="h2"
-            sx={{ marginBottom: "5px" }}>Edit the task title</Typography>
+            sx={{ marginBottom: "5px" }}
+          >
+            Edit the task title
+          </Typography>
           <TextField
             id="standard-basic"
             label="Task title"
             variant="standard"
             sx={{ width: "100%", marginTop: "10px" }}
             value={editedTitle}
-            onChange={handleEditChange}
+            onChange={(e) => {
+              setEditedTitle(e.target.value);
+            }}
           />
-          <Button variant="outlined" sx={{ marginTop: "20px" }} onClick={submitTaskEdit}>
+          <Button
+            variant="outlined"
+            sx={{ marginTop: "20px" }}
+            onClick={submitTaskEdit}
+          >
             Update
           </Button>
         </Box>
